@@ -10,9 +10,11 @@ public class ThreadState {
         );
         first.start();
         second.start();
+        int i = 0;
         while (first.getState() != Thread.State.TERMINATED || second.getState() != Thread.State.TERMINATED) {
-            //  this is not effective wait method
+            i++;
         }
-        System.out.println(first.getState() + " " + second.getState() + " Work complete!");
+        System.out.println(first.getState() + " " + second.getState() + " Work complete! Terminating secondary " +
+                "threads wait cycles: " + i);
     }
 }
