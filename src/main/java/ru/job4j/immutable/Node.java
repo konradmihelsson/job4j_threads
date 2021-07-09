@@ -1,6 +1,6 @@
 package ru.job4j.immutable;
 
-public class Node<T> {
+public final class Node<T> {
     private final T value;
     private final Node<T> next;
 
