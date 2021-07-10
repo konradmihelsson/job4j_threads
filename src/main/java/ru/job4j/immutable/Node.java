@@ -6,11 +6,11 @@ public final class Node<T> {
 
     public Node(T value, Node<T> next) {
         this.value = value;
-        this.next = new Node<>(next.getValue(), next.getNext());
+        this.next = next;
     }
 
     public Node<T> getNext() {
-        return new Node<>(this.next.getValue(), this.next.getNext());
+        return this.next;
     }
 
     public T getValue() {
