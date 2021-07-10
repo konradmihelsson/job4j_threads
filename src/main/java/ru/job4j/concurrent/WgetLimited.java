@@ -31,9 +31,9 @@ public class WgetLimited implements Runnable {
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
                 long diffTime = System.currentTimeMillis() - time;
                 bytesPerSecWrited = bytesPerSecWrited + 1024;
-                long SEC_IN_MILLISEC = 1000;
-                if (bytesPerSecWrited > this.speed && diffTime < SEC_IN_MILLISEC) {
-                    Thread.sleep(SEC_IN_MILLISEC - diffTime);
+                long secInMillisec = 1000;
+                if (bytesPerSecWrited > this.speed && diffTime < secInMillisec) {
+                    Thread.sleep(secInMillisec - diffTime);
                     bytesPerSecWrited = 0;
                     time = System.currentTimeMillis();
                 }
@@ -57,9 +57,9 @@ public class WgetLimited implements Runnable {
     private static void argsValidator(String[] args) {
         if (args.length != 2) {
             String ls = System.lineSeparator();
-            String sb = "Wrong arguments. Usage: WgetLimited url rate" + ls +
-                    "when url - file http(s) web address, rate - download speed limin in byte per second" + ls +
-                    "For example: WgetLimited https://proof.ovh.net/files/1Mb.dat 262144" + ls;
+            String sb = "Wrong arguments. Usage: WgetLimited url rate" + ls
+                    + "when url - file http(s) web address, rate - download speed limin in byte per second" + ls
+                    + "For example: WgetLimited https://proof.ovh.net/files/1Mb.dat 262144" + ls;
             throw new IllegalArgumentException(sb);
         }
     }
