@@ -2,7 +2,7 @@ package ru.job4j.sync;
 
 import org.junit.Test;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class CountTest {
     /**
@@ -37,5 +37,11 @@ public class CountTest {
         /* Проверяем результат. */
         assertThat(count.get(), is(2));
 
+    }
+
+    @Test
+    public void simpleTest() {
+        final Count count = new Count();
+        assertThat(count.get(), is(0));
     }
 }
