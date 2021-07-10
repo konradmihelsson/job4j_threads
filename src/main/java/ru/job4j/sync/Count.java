@@ -3,17 +3,23 @@ package ru.job4j.sync;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 @ThreadSafe
 public class Count {
 
     @GuardedBy("this")
-    private int value;
+    private final AtomicInteger value;
 
-    public void increment() {
-        this.value++;
+    public Count(int value) {
+        this.value = new AtomicInteger(value);
     }
 
-    public int get() {
-        return this.value;
+    public synchronized void increment() {
+        this.value.incrementAndGet();
+    }
+
+    public synchronized int get() {
+        return this.value.get();
     }
 }
