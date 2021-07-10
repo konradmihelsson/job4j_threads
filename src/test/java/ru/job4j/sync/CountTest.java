@@ -24,7 +24,7 @@ public class CountTest {
     @Test
     public void whenExecute2ThreadThen2() throws InterruptedException {
         /* Создаем счетчик. */
-        final Count count = new Count();
+        final Count count = new Count(0);
         /* Создаем нити. */
         Thread first = new ThreadCount(count);
         Thread second = new ThreadCount(count);
@@ -41,7 +41,7 @@ public class CountTest {
 
     @Test
     public void simpleTest() {
-        final Count count = new Count();
+        final Count count = new Count(0);
         assertThat(count.get(), is(0));
     }
 }

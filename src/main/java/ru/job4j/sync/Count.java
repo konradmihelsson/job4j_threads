@@ -9,11 +9,15 @@ public class Count {
     @GuardedBy("this")
     private int value;
 
-    public void increment() {
+    public Count(int value) {
+        this.value = value;
+    }
+
+    public synchronized void increment() {
         this.value++;
     }
 
-    public int get() {
+    public synchronized int get() {
         return this.value;
     }
 }
