@@ -13,21 +13,26 @@ public class UserStorage {
     private final Map<Integer, User> store = new ConcurrentHashMap<>();
 
     synchronized boolean add(User user) {
-        return user.equals(this.store.put(user.getId(), user));
+        return this.store.putIfAbsent(user.getId(), user) == null;
     }
 
     synchronized boolean update(User user) {
-        return user.equals(this.store.replace(user.getId(), user));
+        return this.store.replace(user.getId(), user) != null;
     }
 
     synchronized boolean delete(User user) {
-        return user.equals(this.store.remove(user.getId()));
+        return this.store.remove(user.getId(), user);
     }
 
-    synchronized void transfer(int fromId, int toId, int amount) {
+    synchronized boolean transfer(int fromId, int toId, int amount) {
+        boolean result = false;
         User fromUser = this.store.get(fromId);
         User toUser = this.store.get(toId);
-        fromUser.setAmount(fromUser.getAmount() - amount);
-        toUser.setAmount(toUser.getAmount() + amount);
+        if (fromUser != null && toUser != null && fromUser.getAmount() >= amount) {
+            fromUser.setAmount(fromUser.getAmount() - amount);
+            toUser.setAmount(toUser.getAmount() + amount);
+            result = true;
+        }
+        return result;
     }
 }
