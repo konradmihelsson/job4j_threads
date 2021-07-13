@@ -29,7 +29,13 @@ public class SimpleBlockingQueueTest {
     public void whenProducerAndConsumerWorkingTogether() throws InterruptedException {
 
         SimpleBlockingQueue<String> queue = new SimpleBlockingQueue<>();
-        Thread consumer = new Thread(() -> System.out.println(queue.poll()));
+        Thread consumer = new Thread(() -> {
+            try {
+                System.out.println(queue.poll());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
         Thread producer = new Thread(() -> queue.offer("We are the greatest!"));
         consumer.start();
         producer.start();

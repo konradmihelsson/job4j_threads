@@ -3,23 +3,20 @@ package ru.job4j.interthread;
 public class ParallelSearch {
 
     public static void main(String[] args) {
-
         SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<Integer>();
-        Integer pleaseKillMeTonight = 777;
-
         final Thread consumer = new Thread(
                 () -> {
                     while (true) {
-                        Integer tmp = queue.poll();
-                        if (tmp.equals(pleaseKillMeTonight)) {
-                            break;
+                        try {
+                            System.out.println(queue.poll());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                            Thread.currentThread().interrupt();
                         }
-                        System.out.println(tmp);
                     }
                 }
         );
         consumer.start();
-
         new Thread(
                 () -> {
                     for (int index = 0; index != 3; index++) {
@@ -30,8 +27,8 @@ public class ParallelSearch {
                             e.printStackTrace();
                         }
                     }
-                    queue.offer(pleaseKillMeTonight);
                 }
+
         ).start();
     }
 }
