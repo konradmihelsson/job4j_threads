@@ -6,7 +6,7 @@ public class CountBarrier {
 
     private final int total;
 
-    private int count = 0;
+    private volatile int count = 0;
 
     public CountBarrier(final int total) {
         this.total = total;
@@ -15,9 +15,7 @@ public class CountBarrier {
     public void count() {
         synchronized (monitor) {
             this.count++;
-            if (this.count >= this.total) {
-                monitor.notifyAll();
-            }
+            monitor.notifyAll();
         }
     }
 
