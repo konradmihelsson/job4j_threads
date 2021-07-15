@@ -13,10 +13,10 @@ public class SimpleBlockingQueue<T> {
     private final Queue<T> queue = new LinkedList<>();
 
     @GuardedBy("this")
-    private volatile int maxSize;
+    private final int maxSize;
 
     public SimpleBlockingQueue() {
-        this.maxSize = 4;
+        this.maxSize = Integer.MAX_VALUE;
     }
 
     public SimpleBlockingQueue(int maxSize) {
@@ -33,7 +33,6 @@ public class SimpleBlockingQueue<T> {
                 }
             }
             this.queue.offer(value);
-            this.maxSize++;
             this.notifyAll();
         }
     }
@@ -41,14 +40,9 @@ public class SimpleBlockingQueue<T> {
     public T poll() throws InterruptedException {
         synchronized (this) {
             while (this.queue.isEmpty()) {
-                try {
                     this.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
             }
             T result = this.queue.poll();
-            this.maxSize--;
             this.notifyAll();
             return result;
         }
