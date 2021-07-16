@@ -36,7 +36,13 @@ public class SimpleBlockingQueueTest {
                 e.printStackTrace();
             }
         });
-        Thread producer = new Thread(() -> queue.offer("We are the greatest!"));
+        Thread producer = new Thread(() -> {
+            try {
+                queue.offer("We are the greatest!");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
         consumer.start();
         producer.start();
         consumer.join();

@@ -20,8 +20,8 @@ public class ParallelSearch {
         new Thread(
                 () -> {
                     for (int index = 0; index != 3; index++) {
-                        queue.offer(index);
                         try {
+                            queue.offer(index);
                             Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -29,7 +29,6 @@ public class ParallelSearch {
                     }
                     consumer.interrupt();
                 }
-
         ).start();
     }
 }
