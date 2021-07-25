@@ -19,7 +19,6 @@ public class ThreadPool {
 
     public void work(Runnable job) throws InterruptedException {
         this.tasks.offer(job);
-            this.tasks.notify();
     }
 
     public void shutdown() {
@@ -30,14 +29,6 @@ public class ThreadPool {
         @Override
         public void run() {
             while (!Thread.currentThread().isInterrupted()) {
-                while (tasks.isEmpty()) {
-                    try {
-                        tasks.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        Thread.currentThread().interrupt();
-                    }
-                }
                 try {
                     tasks.poll().run();
                 } catch (InterruptedException e) {
