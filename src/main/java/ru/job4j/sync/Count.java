@@ -9,8 +9,8 @@ public class Count {
     @GuardedBy("this")
     private int value;
 
-    public Count(int value) {
-        this.value = value;
+    public Count(int initialValue) {
+        this.value = initialValue;
     }
 
     public synchronized void increment() {
