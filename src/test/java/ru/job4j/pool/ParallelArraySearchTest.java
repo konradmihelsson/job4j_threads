@@ -10,48 +10,54 @@ import static org.junit.Assert.*;
 
 public class ParallelArraySearchTest {
 
-    private ParallelArraySearch parallelArraySearch;
-    private Object[] array;
-    private final ForkJoinPool forkJoinPool = new ForkJoinPool();
-
     @Test
     public void whenArrayContainsNeededObjectLinearSearch() {
-        array = arrayForLinearSearch();
-        parallelArraySearch = new ParallelArraySearch(array, "This is some object.");
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        Object[] array = arrayForLinearSearch();
+        ParallelArraySearch parallelArraySearch =
+                new ParallelArraySearch(array, "This is some object.", 0, array.length);
         assertEquals(2, (int) forkJoinPool.invoke(parallelArraySearch));
     }
 
     @Test
     public void whenArrayNotContainsNeededObjectLinearSearch() {
-        array = arrayForLinearSearch();
-        parallelArraySearch = new ParallelArraySearch(array, "This is another object.");
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        Object[] array = arrayForLinearSearch();
+        ParallelArraySearch parallelArraySearch =
+                new ParallelArraySearch(array, "This is another object.", 0, array.length);
         assertEquals(-1, (int) forkJoinPool.invoke(parallelArraySearch));
     }
 
     @Test
     public void whenArrayContainsNeededObject() {
-        array = arrayForFullSearch();
-        parallelArraySearch = new ParallelArraySearch(array, "This is some object.");
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        Object[] array = arrayForFullSearch();
+        ParallelArraySearch parallelArraySearch =
+                new ParallelArraySearch(array, "This is some object.", 0, array.length);
         assertEquals(44, (int) forkJoinPool.invoke(parallelArraySearch));
     }
 
     @Test
     public void whenArrayNotContainsNeededObject() {
-        array = arrayForFullSearch();
-        parallelArraySearch = new ParallelArraySearch(array, "This is another object.");
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        Object[] array = arrayForFullSearch();
+        ParallelArraySearch parallelArraySearch =
+                new ParallelArraySearch(array, "This is another object.", 0, array.length);
         assertEquals(-1, (int) forkJoinPool.invoke(parallelArraySearch));
     }
 
     @Test
-    public void whenArrayContainsSeveralNeededObjectsThenFindLeastIndexOfAllThem() {
-        array = arrayForFullSearch();
+    public void whenArrayContainsSeveralNeededObjectsThenFindLastIndexOfAllThem() {
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        Object[] array = arrayForFullSearch();
         array[11] = "This is some object.";
         array[22] = "This is some object.";
         array[33] = "This is some object.";
         array[55] = "This is some object.";
         array[104] = "This is some object.";
-        parallelArraySearch = new ParallelArraySearch(array, "This is some object.");
-        assertEquals(11, (int) forkJoinPool.invoke(parallelArraySearch));
+        ParallelArraySearch parallelArraySearch =
+                new ParallelArraySearch(array, "This is some object.", 0, array.length);
+        assertEquals(104, (int) forkJoinPool.invoke(parallelArraySearch));
     }
 
     private Object[] arrayForLinearSearch() {
