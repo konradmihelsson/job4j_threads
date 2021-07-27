@@ -18,15 +18,15 @@ public class ParallelArraySearch extends RecursiveTask<Integer> {
 
     @Override
     protected Integer compute() {
-        int range = this.indexTo - this.indexFrom;
+        int range = indexTo - indexFrom;
         if (range < 11) {
-            return linearSearch(this.array, this.someObject, this.indexFrom, this.indexTo);
+            return linearSearch(array, someObject, indexFrom, indexTo);
         }
-        int indexOfMiddle = this.indexFrom + range / 2;
+        int indexOfMiddle = indexFrom + range / 2;
         ParallelArraySearch leftHalfOfArray =
-                new ParallelArraySearch(this.array, this.someObject, this.indexFrom, indexOfMiddle);
+                new ParallelArraySearch(array, someObject, indexFrom, indexOfMiddle);
         ParallelArraySearch rightHalfOfArray =
-                new ParallelArraySearch(this.array, this.someObject, indexOfMiddle, this.indexTo);
+                new ParallelArraySearch(array, someObject, indexOfMiddle, indexTo);
         leftHalfOfArray.fork();
         rightHalfOfArray.fork();
         int leftIndexOfSomeObject = leftHalfOfArray.join();
@@ -36,7 +36,7 @@ public class ParallelArraySearch extends RecursiveTask<Integer> {
 
     private int linearSearch(Object[] array, Object someObject, int indexFrom, int indexTo) {
         int result = -1;
-        for (int i = indexFrom; i < indexTo; i++) {
+        for (int i = indexFrom; i <= indexTo; i++) {
             if (array[i].equals(someObject)) {
                 return i;
             }

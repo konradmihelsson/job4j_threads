@@ -15,7 +15,7 @@ public class ParallelArraySearchTest {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         Object[] array = arrayForLinearSearch();
         ParallelArraySearch parallelArraySearch =
-                new ParallelArraySearch(array, "This is some object.", 0, array.length);
+                new ParallelArraySearch(array, "This is some object.", 0, array.length - 1);
         assertEquals(2, (int) forkJoinPool.invoke(parallelArraySearch));
     }
 
@@ -24,7 +24,7 @@ public class ParallelArraySearchTest {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         Object[] array = arrayForLinearSearch();
         ParallelArraySearch parallelArraySearch =
-                new ParallelArraySearch(array, "This is another object.", 0, array.length);
+                new ParallelArraySearch(array, "This is another object.", 0, array.length - 1);
         assertEquals(-1, (int) forkJoinPool.invoke(parallelArraySearch));
     }
 
@@ -33,7 +33,7 @@ public class ParallelArraySearchTest {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         Object[] array = arrayForFullSearch();
         ParallelArraySearch parallelArraySearch =
-                new ParallelArraySearch(array, "This is some object.", 0, array.length);
+                new ParallelArraySearch(array, "This is some object.", 0, array.length - 1);
         assertEquals(44, (int) forkJoinPool.invoke(parallelArraySearch));
     }
 
@@ -42,7 +42,7 @@ public class ParallelArraySearchTest {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         Object[] array = arrayForFullSearch();
         ParallelArraySearch parallelArraySearch =
-                new ParallelArraySearch(array, "This is another object.", 0, array.length);
+                new ParallelArraySearch(array, "This is another object.", 0, array.length - 1);
         assertEquals(-1, (int) forkJoinPool.invoke(parallelArraySearch));
     }
 
@@ -56,7 +56,7 @@ public class ParallelArraySearchTest {
         array[55] = "This is some object.";
         array[104] = "This is some object.";
         ParallelArraySearch parallelArraySearch =
-                new ParallelArraySearch(array, "This is some object.", 0, array.length);
+                new ParallelArraySearch(array, "This is some object.", 0, array.length - 1);
         assertEquals(104, (int) forkJoinPool.invoke(parallelArraySearch));
     }
 
