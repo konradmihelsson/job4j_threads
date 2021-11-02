@@ -16,7 +16,13 @@ public class SimpleBlockingQueueTotalTest {
         final CopyOnWriteArrayList<Integer> buffer = new CopyOnWriteArrayList<>();
         final SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>();
         Thread producer = new Thread(
-                () -> IntStream.range(0, 5).forEach(x -> wrapOffer(queue, x))
+                () -> IntStream.range(0, 5).forEach(x -> {
+                    try {
+                        queue.offer(x);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                })
         );
         producer.start();
         Thread consumer = new Thread(
@@ -36,13 +42,5 @@ public class SimpleBlockingQueueTotalTest {
         consumer.interrupt();
         consumer.join();
         assertThat(buffer, is(Arrays.asList(0, 1, 2, 3, 4)));
-    }
-
-    private void wrapOffer(SimpleBlockingQueue<Integer> queue, int num) {
-        try {
-            queue.offer(num);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }

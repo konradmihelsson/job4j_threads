@@ -11,7 +11,16 @@ public class ThreadPool {
     public ThreadPool() {
         final int threadsSize = Runtime.getRuntime().availableProcessors();
         for (int i = 0; i != threadsSize; i++) {
-            Thread thread = new Thread(new WorkingRunnable());
+            Thread thread = new Thread(() -> {
+                while (!Thread.currentThread().isInterrupted()) {
+                    try {
+                        tasks.poll().run();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            });
             threads.add(thread);
             thread.start();
         }
@@ -23,19 +32,5 @@ public class ThreadPool {
 
     public void shutdown() {
         this.threads.forEach(Thread::interrupt);
-    }
-
-    private class WorkingRunnable implements Runnable {
-        @Override
-        public void run() {
-            while (!Thread.currentThread().isInterrupted()) {
-                try {
-                    tasks.poll().run();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Thread.currentThread().interrupt();
-                }
-            }
-        }
     }
 }

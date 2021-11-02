@@ -20,21 +20,26 @@ public class WgetLimited implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("Downloading started...");
+        long start = System.currentTimeMillis();
         try (BufferedInputStream in = new BufferedInputStream(new URL(this.url).openStream());
              FileOutputStream fileOutputStream =
                      new FileOutputStream(Paths.get(new URI(url).getPath()).getFileName().toString())) {
             byte[] dataBuffer = new byte[1024];
             int bytesRead;
             long time = System.currentTimeMillis();
-            int bytesPerSecWrited = 0;
+            int bytesWrited = 0;
             while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
-                long diffTime = System.currentTimeMillis() - time;
-                bytesPerSecWrited = bytesPerSecWrited + 1024;
-                long secInMillisec = 1000;
-                if (bytesPerSecWrited > this.speed && diffTime < secInMillisec) {
-                    Thread.sleep(secInMillisec - diffTime);
-                    bytesPerSecWrited = 0;
+                bytesWrited = bytesWrited + bytesRead;
+                if (bytesWrited > this.speed) {
+                    long diffTime = System.currentTimeMillis() - time;
+                    System.out.println(bytesWrited + " " + diffTime);
+                    if (diffTime < 1000) {
+                        System.out.println("sleeping for " + (1000 - diffTime) + " ms");
+                        Thread.sleep(1000 - diffTime);
+                    }
+                    bytesWrited = 0;
                     time = System.currentTimeMillis();
                 }
             }
@@ -43,6 +48,7 @@ public class WgetLimited implements Runnable {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+        System.out.println("Downloading is complete: " + ((System.currentTimeMillis() - start) / 1000f));
     }
 
     public static void main(String[] args) throws InterruptedException {
